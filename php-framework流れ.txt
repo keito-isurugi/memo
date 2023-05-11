@@ -1,0 +1,47 @@
+public直下のindex.phpにアクセス
+
+index.php
+./bootstrap/bootstrap.phpをrequire_onceで読み込む
+
+
+	bootstrap.php
+	./core/ClassLoader.phpをrequire_onceで読み込む
+
+	ClassLoaderクラスをインスタンス化
+	spl_autoload_registerを使用して
+	未定義クラスのディレクトリを読み込みインスタンス化
+
+	Appクラスをインスタンス化(Applicationクラスを継承している)
+	setRequest()、setRoutes()が実行される
+
+		setRequest()
+		Requestクラスをインスタンス化しURLを解析し配列に情報を格納
+
+		setRoutes()
+		Routerクラスをインスタンス化
+			URLをkeyにしコントローラーとメソッドを引数
+			routesプロパティに引数を格納
+
+	Appクラスrun()メソッドを実行
+	Routerクラスのroutesプロパティに格納された情報をもとにコントローラーをインスタンス化、メソッドを実行
+	
+	
+HomeController.phpのindex()メソッド
+(usersテーブルのidが1、emailがtest@test.comのレコードを取得)
+		Userクラスでwhereメソッドを実行(Modelクラスのwhereメソッド)
+		UserクラスはModelクラスを継承している
+		
+		Modelクラスwhereメソッド
+		initDBメソッドでDBクラスをインスタンス化
+		DBクラスのwhereメソッドを実行
+
+		DBクラスのwhereメソッド
+			resolveTableNameメソッドでテーブル名をtableプロパティに代入
+			sqlプロパティにsql文を代入、最初の呼び出しはselectから、次回はand
+		DBクラスのfirstメソッド
+			runメソッドでpdoを使ってsql実行
+			resolveModelsメソッドにrunメソッドの返り値を引数に
+			配列の要素を連想配列からモデルへ
+
+
+
